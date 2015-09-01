@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FBsimplelogin.iml" filepath="$PROJECT_DIR$/FBsimplelogin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FBL.iml" filepath="$PROJECT_DIR$/FBL.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
