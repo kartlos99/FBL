@@ -55,13 +55,13 @@ public class MainFragment extends android.support.v4.app.Fragment {
 //                    e.printStackTrace();
 //                }
 
-                Uri uri = profile.getProfilePictureUri(200,200);
+                Uri uri = profile.getProfilePictureUri(200,400);
                 //uri.toString()
 //                imageView.setImageURI(uri);
 
                 Picasso.with(getActivity())
                         .load(uri)
-                        .resize(200,200)
+                        .resize(400,200)
                         .centerCrop()
                         .into(imageView);
 
