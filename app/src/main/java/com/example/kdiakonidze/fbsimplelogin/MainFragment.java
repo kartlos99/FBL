@@ -22,6 +22,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -54,8 +55,15 @@ public class MainFragment extends android.support.v4.app.Fragment {
 //                    e.printStackTrace();
 //                }
 
-                Uri uri = profile.getProfilePictureUri(100,100);
-                imageView.setImageURI(uri);
+                Uri uri = profile.getProfilePictureUri(200,200);
+                //uri.toString()
+//                imageView.setImageURI(uri);
+
+                Picasso.with(getActivity())
+                        .load(uri)
+                        .resize(200,200)
+                        .centerCrop()
+                        .into(imageView);
 
             }
 
