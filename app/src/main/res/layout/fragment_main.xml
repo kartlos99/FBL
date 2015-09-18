@@ -6,7 +6,10 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/fbtext"
-        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_margin="12dp"
+        android:textSize="18sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/hello_blank_fragment" />
 
     <ImageView
@@ -16,7 +19,7 @@
         android:background="@drawable/abc_list_longpressed_holo"
         android:id="@+id/profileImage"
         android:layout_width="match_parent"
-        android:layout_height="140dp" />
+        android:layout_height="wrap_content" />
 
     <com.facebook.login.widget.LoginButton
         android:layout_width="wrap_content"
@@ -24,5 +27,26 @@
         android:id="@+id/FB_btn"
         android:layout_gravity="center"
         android:layout_margin="30dp" />
+
+    <ImageView
+        android:id="@+id/image2"
+        android:layout_gravity="bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn1"
+        android:text="drawphoto"
+        android:layout_gravity="right|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="bt2"
+        android:id="@+id/bt2"
+        android:layout_gravity="left|center_vertical" />
+
 
 </FrameLayout>

@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,10 +20,14 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -31,7 +36,8 @@ import java.net.URL;
 
 public class MainFragment extends android.support.v4.app.Fragment {
 
-    ImageView imageView;
+    String ss;
+    ImageView imageView, imig2;
     TextView textView;
     private CallbackManager callbackManager;
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
@@ -42,26 +48,13 @@ public class MainFragment extends android.support.v4.app.Fragment {
             if(profile !=null){
                 textView.setText(" FB "+profile.getName());
 
-//                URL img_value = null;
-//                try {
-//                    img_value = new URL(""+profile.getProfilePictureUri(128,128));
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                }
-//                Bitmap mIcon1=null;
-//                try {
-//                    mIcon1 = BitmapFactory.decodeStream(img_value.openConnection().getInputStream());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-                Uri uri = profile.getProfilePictureUri(200,400);
-                //uri.toString()
+                Uri uri = profile.getProfilePictureUri(300, 300);
+                ss = uri.toString();
 //                imageView.setImageURI(uri);
 
                 Picasso.with(getActivity())
                         .load(uri)
-                        .resize(400,200)
+                        .resize(400,400)
                         .centerCrop()
                         .into(imageView);
 
@@ -100,12 +93,75 @@ public class MainFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
-
+// MY FB ID 1209856909031863 k.d.
+//          100000226954596
+//            1188484511169103
+//    http://graph.facebook.com/1209856909031863/picture?type=square
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         textView = (TextView) view.findViewById(R.id.fbtext);
         imageView = (ImageView) view.findViewById(R.id.profileImage);
+        imig2 = (ImageView) view.findViewById(R.id.image2);
+        Button bt2 = (Button) view.findViewById(R.id.bt2);
+
+//        AccessToken accessToken =
+
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        // Insert your code here
+                    }
+                });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "gender,cover,birthday");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+        bt2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Profile profile = Profile.getCurrentProfile();
+                if(profile != null) {
+                    textView.setText(profile.getId());
+
+
+
+//                    try {
+//                        URL imgUrl = new URL("http://graph.facebook.com/"+profile.getId()+"/picture?type=small");
+//                        Bitmap bmp = BitmapFactory.decodeStream(imgUrl.openConnection().getInputStream() );
+//                        imig2.setImageBitmap(bmp);
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+
+
+                }
+            }
+        });
+
+//    *******************************
+        Button button = (Button) view.findViewById(R.id.btn1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Profile profile = Profile.getCurrentProfile();
+                if(profile != null) {
+                    textView.setText(profile.getProfilePictureUri(100,100).toString());
+
+                    Picasso.with(getActivity())
+                            .load(profile.getProfilePictureUri(600  , 600))
+                            .resize(300, 300)
+                            .centerCrop()
+                            .into(imig2);
+                }
+            }
+        });
 
         LoginButton loginButton = (LoginButton) view.findViewById(R.id.FB_btn);
         loginButton.setReadPermissions("user_friends");
