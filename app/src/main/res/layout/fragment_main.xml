@@ -4,13 +4,6 @@
     tools:context="com.example.kdiakonidze.fbsimplelogin.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/fbtext"
-        android:layout_margin="12dp"
-        android:textSize="18sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
 
     <ImageView
         android:layout_margin="33dp"
@@ -47,6 +40,15 @@
         android:text="bt2"
         android:id="@+id/bt2"
         android:layout_gravity="left|center_vertical" />
+
+    <TextView
+        android:id="@+id/fbtext"
+        android:layout_margin="12dp"
+        android:textSize="18sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_blank_fragment"
+        android:layout_gravity="left|bottom" />
 
 
 </FrameLayout>

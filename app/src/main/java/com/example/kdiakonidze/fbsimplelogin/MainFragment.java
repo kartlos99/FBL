@@ -35,7 +35,7 @@ import java.net.URL;
 
 
 public class MainFragment extends android.support.v4.app.Fragment {
-
+    AccessToken accessToken;
     String ss;
     ImageView imageView, imig2;
     TextView textView;
@@ -43,7 +43,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
-            AccessToken accessToken = loginResult.getAccessToken();
+            accessToken = loginResult.getAccessToken();
             Profile profile = Profile.getCurrentProfile();
             if(profile !=null){
                 textView.setText(" FB "+profile.getName());
@@ -96,6 +96,9 @@ public class MainFragment extends android.support.v4.app.Fragment {
 // MY FB ID 1209856909031863 k.d.
 //          100000226954596
 //            1188484511169103
+
+    // 100000444121344 mari  mariiii87
+    //    http://graph.facebook.com/100000226954596/picture?width=300
 //    http://graph.facebook.com/1209856909031863/picture?type=square
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -107,19 +110,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
 //        AccessToken accessToken =
 
-        GraphRequest request = GraphRequest.newMeRequest(
-                accessToken,
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        // Insert your code here
-                    }
-                });
 
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "gender,cover,birthday");
-        request.setParameters(parameters);
-        request.executeAsync();
 
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +119,20 @@ public class MainFragment extends android.support.v4.app.Fragment {
                 if(profile != null) {
                     textView.setText(profile.getId());
 
+                    GraphRequest request = GraphRequest.newMeRequest(
+                            accessToken,
+                            new GraphRequest.GraphJSONObjectCallback() {
+                                @Override
+                                public void onCompleted(JSONObject object, GraphResponse response) {
 
+                                    textView.setText(object.toString());
+                                }
+                            });
+
+                    Bundle parameters = new Bundle();
+                    parameters.putString("fields", "gender,cover,birthday");
+                    request.setParameters(parameters);
+                    request.executeAsync();
 
 //                    try {
 //                        URL imgUrl = new URL("http://graph.facebook.com/"+profile.getId()+"/picture?type=small");
@@ -155,7 +159,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
                     textView.setText(profile.getProfilePictureUri(100,100).toString());
 
                     Picasso.with(getActivity())
-                            .load(profile.getProfilePictureUri(600  , 600))
+                            .load("http://graph.facebook.com/100000444121344/picture?width=300")
                             .resize(300, 300)
                             .centerCrop()
                             .into(imig2);
