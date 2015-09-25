@@ -22,11 +22,13 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -45,8 +47,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
         public void onSuccess(LoginResult loginResult) {
             accessToken = loginResult.getAccessToken();
             Profile profile = Profile.getCurrentProfile();
-            if(profile !=null){
-                textView.setText(" FB "+profile.getName());
+            if (profile != null) {
+                textView.setText(" FB " + profile.getName());
 
                 Uri uri = profile.getProfilePictureUri(300, 300);
                 ss = uri.toString();
@@ -54,24 +56,24 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
                 Picasso.with(getActivity())
                         .load(uri)
-                        .resize(400,400)
+                        .resize(400, 400)
                         .centerCrop()
                         .into(imageView);
 
             }
 
-            Toast.makeText(getActivity(),"warmatebit sevida",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "warmatebit sevida", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onCancel() {
 
-            Toast.makeText(getActivity(),"Canseled",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Canseled", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onError(FacebookException e) {
-            Toast.makeText(getActivity(),"Errorio",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Errorio", Toast.LENGTH_LONG).show();
 
         }
     };
@@ -93,13 +95,14 @@ public class MainFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
-// MY FB ID 1209856909031863 k.d.
-//          100000226954596
-//            1188484511169103
-
-    // 100000444121344 mari  mariiii87
-    //    http://graph.facebook.com/100000226954596/picture?width=300
+//    MY FB  ID 1209856909031863k.d.
+//    100000226954596
+//    1188484511169103
+//    100000444121344  mari mariiii87
+//    http://graph.facebook.com/100000226954596/picture?width=300
 //    http://graph.facebook.com/1209856909031863/picture?type=square
+
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -108,15 +111,12 @@ public class MainFragment extends android.support.v4.app.Fragment {
         imig2 = (ImageView) view.findViewById(R.id.image2);
         Button bt2 = (Button) view.findViewById(R.id.bt2);
 
-//        AccessToken accessToken =
-
-
-
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Profile profile = Profile.getCurrentProfile();
-                if(profile != null) {
+                if (profile != null) {
                     textView.setText(profile.getId());
 
                     GraphRequest request = GraphRequest.newMeRequest(
@@ -154,16 +154,18 @@ public class MainFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                Profile profile = Profile.getCurrentProfile();
-                if(profile != null) {
-                    textView.setText(profile.getProfilePictureUri(100,100).toString());
+                test1();
 
-                    Picasso.with(getActivity())
-                            .load("http://graph.facebook.com/100000444121344/picture?width=300")
-                            .resize(300, 300)
-                            .centerCrop()
-                            .into(imig2);
-                }
+//                Profile profile = Profile.getCurrentProfile();
+//                if (profile != null) {
+//                    textView.setText(profile.getProfilePictureUri(100, 100).toString());
+//
+//                    Picasso.with(getActivity())
+//                            .load("http://graph.facebook.com/100000444121344/picture?width=300")
+//                            .resize(300, 300)
+//                            .centerCrop()
+//                            .into(imig2);
+//                }
             }
         });
 
@@ -177,6 +179,93 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode,resultCode,data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    void test2() {
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/1209856909031863/picture",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        textView.setText(response.getJSONObject().toString());
+                    }
+                }
+        ).executeAsync();
+    }
+
+    void test1() {
+        Bundle parameters;
+
+        if (accessToken == null) {
+            accessToken = AccessToken.getCurrentAccessToken();
+        }
+
+        GraphRequest request = GraphRequest.newGraphPathRequest(
+                accessToken,
+                "/100000971796628",
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        // Insert your code here
+
+                        textView.setText(response.getJSONObject().toString());
+
+                        try {
+                            JSONObject mariObj = response.getJSONObject().getJSONObject("picture").getJSONObject("data");
+
+                            Picasso.with(getActivity())
+                                    .load(mariObj.getString("url"))
+                                    .resize(150, 100)
+                                    .centerCrop()
+                                    .into(imageView);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+        parameters = new Bundle();
+        parameters.putString("fields", "picture");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+//        ---------------
+
+//        GraphRequest request1 = GraphRequest.newMeRequest(
+//                accessToken,
+//                new GraphRequest.GraphJSONObjectCallback() {
+//                    @Override
+//                    public void onCompleted(JSONObject object, GraphResponse response) {
+//                        // Insert your code here
+//
+//                        textView.setText(object.toString());
+//
+//                        try {
+//                            JSONObject object1 = object.getJSONObject("cover");
+//                            Picasso.with(getActivity())
+//                                    .load(object1.getString("source"))
+//                                    .resize(400, 400)
+//                                    .centerCrop()
+//                                    .into(imageView);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//
+//                    }
+//                });
+
+//        Bundle parameters = new Bundle();
+//        parameters.putString("fields", "cover");
+//        request1.setParameters(parameters);
+//        request1.executeAsync();
     }
 }
